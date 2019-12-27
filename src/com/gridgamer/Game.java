@@ -4,11 +4,11 @@ import java.util.*;
 import java.lang.Math.*;
 
 class Grid{
-	CoordinatePoint ball;
-	CoordinatePoint person;
-	Grid(CoordinatePoint ball,CoordinatePoint person){
-		this.ball = ball;
-		this.person = person;
+	Ball ball;
+	Person person;
+	Grid(){
+		ball = new Ball((int)(Math.random()*10),(int)(Math.random()*10));
+		person = new Person(0,0);
 	}
 	boolean isPersonReached(){
 		if(ball.xCord == person.xCord && ball.yCord == person.yCord){
@@ -16,41 +16,38 @@ class Grid{
 		}
 		return false;
 	}
-	boolean movePersonInXDir(){
-		if(ball.xCord > person.xCord){
-			person.xCord ++;
-			return true;
-		}return false;
-		
-	}
-	boolean movePersonInYDir(){
-		if(ball.yCord > person.yCord){
-			person.yCord ++;
-			return true;
-		}
-		return false;		
-	}
+	
 }
-class CoordinatePoint{
+class Ball{
 	int xCord;
 	int yCord;
-	CoordinatePoint(int xCord,int yCord){
+	Ball(int xCord,int yCord){
 		this.xCord = xCord;
 		this.yCord = yCord;
 	}
 }
 
-
+class Person{
+	int xCord;
+	int yCord;
+	Person(int xCord,int yCord){
+		this.xCord = xCord;
+		this.yCord = yCord;
+	}
+	void movePersonInXDir(){
+		xCord ++;
+	}
+	void movePersonInYDir(){
+		yCord ++;		
+	}
+}
 public class Game{
 	ArrayList<String> path = new ArrayList<>();
 	Grid grid;
 
 	public void startGame(){
-		CoordinatePoint b = new CoordinatePoint((int)(Math.random()*10),(int)(Math.random()*10));
-		CoordinatePoint p = new CoordinatePoint(0,0);
-		grid = new Grid(b,p);
-
-		System.out.println("\n\tBall location:\n\txCord:"+b.xCord+"  yCord:"+b.yCord);
+		grid = new Grid();
+		System.out.println("\n\tBall location:\n\txCord:"+grid.ball.xCord+"  yCord:"+grid.ball.yCord);
 		findPath();
 		System.out.println("\n****************************");
 		for(String step:path){
@@ -59,10 +56,12 @@ public class Game{
 		System.out.println("****************************");
 	}
 	void findPath(){
-		while(grid.movePersonInXDir()){
+		while(grid.person.xCord != grid.ball.xCord){
+			grid.person.movePersonInXDir();
 			path.add(String.format("xCord:%d , yCord:%d",grid.person.xCord,grid.person.yCord));
 		}
-		while(grid.movePersonInYDir()){
+		while(grid.person.yCord != grid.ball.yCord){
+			grid.person.movePersonInYDir();
 			path.add(String.format("xCord:%d , yCord:%d",grid.person.xCord,grid.person.yCord));
 		}
 		
